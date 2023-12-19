@@ -20,10 +20,10 @@ font = pygame.font.SysFont("arialblack", 40)
 TEXT_COL = (255, 255, 255)
 
 #load button images
-resume_img = pygame.image.load("Hangman/Menu/images/button_resume.png").convert_alpha()
+#resume_img = pygame.font.SysFont("arialblack", 40)
 
 #create button instances
-resume_button == button.Button(304, 125, resume_img,1)
+#resume_img = pygame.image.load("")
 
 def draw_text(text, font, text_col, x, y):
     img= font.render(text, True, text_col)
@@ -35,7 +35,7 @@ while run:
     screen.fill((52, 78, 91))
    #check if game is paused
     if game_paused == True:
-       resume_button.draw(screen)
+     pass
     #display menu
     else:
      draw_text("Press SPACE to pause", font, TEXT_COL, 160, 250)
