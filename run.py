@@ -92,7 +92,7 @@ def drawAlphabet(itemList):
     for item in itemList:
         item.draw(GAMESCREEN)
 
-    GAMESCREEN.blit(drawLetters(f'Winning Streak : {str(winStreak)}'), (SCREENWIDTH - 300, 100))
+    GAMESCREEN.blit(drawLetters(f'Winning Series : {str(winStreak)}'), (SCREENWIDTH - 300, 100))
 
 def endGame():
     """Handles the end of a round"""
@@ -185,12 +185,20 @@ def drawHangman(window, numberGuesses):
     if numberGuesses >= 6:
         drawRightLeg(window)
 
+def useHint(chosen_word, guessed_word):
+    """Uses the hint to reveal a random letter in the chosen word."""
+    available_hints = [index for index, letter in enumerate(chosen_word) if guessed_word[index] == ' ']
+    if available_hints:
+        hint_index = random.choice(available_hints)
+        guessed_word[hint_index] = chosen_word[hint_index]
+
 # Hangman Words list
 pygame.init()
 pygame.font.init()
 difficulty = selectDifficulty()
 WORDLIST = []
 ALPHABETBUTTONS = []
+
 openFile(difficulty)  # Assuming 'difficulty' is already defined
 
 # Game settings
@@ -212,6 +220,9 @@ print(guessWord)
 mouseClicked = False
 gameOver = False
 winStreak = 0
+
+# Define hint button rectangle
+hintButtonRect = pygame.Rect(SCREENWIDTH - 100, 10, 80, 30)
 
 # Main game loop.
 RUN = True
@@ -235,6 +246,10 @@ while RUN:
                         numberOfGuesses += 1
                     item.active = False
 
+            # Check if the hint button is pressed
+            if hintButtonRect.collidepoint(event.pos):
+                useHint(chosenWord, guessWord)
+
         elif event.type == pygame.MOUSEBUTTONUP:
             mouseClicked = False
 
@@ -242,9 +257,12 @@ while RUN:
     drawAlphabet(ALPHABETBUTTONS)
     drawHangman(GAMESCREEN, numberOfGuesses)
 
-    for ALPHABETBUTTON in ALPHABETBUTTONS:
-        if ALPHABETBUTTON.imageRect.collidepoint(pygame.mouse.get_pos()):
-            ALPHABETBUTTON.mouseHighlight(GAMESCREEN)
+    # Draw the hint button
+    pygame.draw.rect(GAMESCREEN, (255, 0, 0), hintButtonRect)
+    pygame.draw.rect(GAMESCREEN, WHITE, hintButtonRect, 1)
+    hint_text = drawLetters('ASK ME!')
+    GAMESCREEN.blit(hint_text, (hintButtonRect.x + hintButtonRect.width // 2 - hint_text.get_width() // 2,
+                                hintButtonRect.y + hintButtonRect.height // 2 - hint_text.get_height() // 2))
 
     pygame.display.update()
 
