@@ -1,1 +1,1 @@
-normal
+Guitar,Elephant,Laptop,Mountain,Basket,Journey,Weather,Library,Painter,Capture

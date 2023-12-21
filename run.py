@@ -38,14 +38,14 @@ def openFile(difficulty):
 def selectDifficulty():
     """Allow the player to choose difficulty level"""
     print("Select difficulty level:")
-    print("1. Easy")
-    print("2. Medium")
-    print("3. Hard")
+    print("1. Easy Level")
+    print("2. Medium Level")
+    print("3. Hard Level")
 
     while True:
-        choice = input("Enter the number corresponding to your choice: ")
+        choice = input("Which level would you like to choose?: ")
         if choice in ['1', '2', '3']:
-            return {'1': 'easy', '2': 'medium', '3': 'hard'}[choice]
+            return {'1': 'easy', '2': 'medium', '3': 'hard2'}[choice]
         else:
             print("Invalid choice. Please enter 1, 2, or 3.")
 
