@@ -1,5 +1,6 @@
 import pygame
 import random
+
 class HangmanButton:
     def __init__(self, position, image, letter):
         self.position = position
@@ -8,12 +9,10 @@ class HangmanButton:
         self.imageRect = pygame.Rect(self.position[0] - 5, self.position[1], 30, 30)
         self.active = True
 
-
     def mouseHighlight(self, window):
         pygame.draw.rect(window, (255, 0, 0), [self.imageRect[0], self.imageRect[1], self.imageRect[2], self.imageRect[3]])
         window.blit(self.image, self.position)
         pygame.draw.rect(window, WHITE, [self.imageRect[0], self.imageRect[1], self.imageRect[2], self.imageRect[3]], 1)
-
 
     def draw(self, window):
         if self.active:
@@ -22,9 +21,10 @@ class HangmanButton:
         else:
             self.mouseHighlight(window)
 
-def openFile():
-    """Open and load words from the text file into a simple list"""
-    with open('easyWordList.txt', 'r') as file:
+def openFile(difficulty):
+    """Open and load words from the text file into a simple list based on difficulty"""
+    filename = f'{difficulty}WordList.txt'
+    with open(filename, 'r') as file:
         content = file.readlines()
         newList = []
         for itemList in content:
@@ -35,11 +35,23 @@ def openFile():
                 if len(word.strip()) >= 3 and len(word.strip()) <= 10:
                     WORDLIST.append(word.strip())
 
+def selectDifficulty():
+    """Allow the player to choose difficulty level"""
+    print("Select difficulty level:")
+    print("1. Easy")
+    print("2. Medium")
+    print("3. Hard")
+
+    while True:
+        choice = input("Enter the number corresponding to your choice: ")
+        if choice in ['1', '2', '3']:
+            return {'1': 'easy', '2': 'medium', '3': 'hard'}[choice]
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
 
 def selectRandomWord():
     """Select a random word from the Word List Generated"""
     return random.choice(WORDLIST)
-
 
 def drawLetters(letter):
     """Creates the font object for text on the screen."""
@@ -47,9 +59,8 @@ def drawLetters(letter):
     printText = text.render(letter, 1, WHITE)
     return printText
 
-
 def drawLetterLines(word):
-    """Draw lines for each letter in chosen word"""
+    """Draw lines for each letter in the chosen word"""
     wordLengthX = len(word) * (25 + 15)
 
     startXY = [SCREENWIDTH - 50 - wordLengthX, 350]
@@ -62,9 +73,8 @@ def drawLetterLines(word):
         startXY[0] = startXY[0] + lengthXY[0] + spacing[0]
         startXY[1] = startXY[1] + lengthXY[1] + spacing[1]
 
-
 def createAlphabet():
-    """Creates the alphabet objects for screen"""
+    """Creates the alphabet objects for the screen"""
     alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     xPos = 100
     yPos = 500
@@ -77,14 +87,12 @@ def createAlphabet():
         xPos = 100
         yPos += 40
 
-
 def drawAlphabet(itemList):
-    """Draws the alhpabet to the screen."""
+    """Draws the alphabet to the screen."""
     for item in itemList:
         item.draw(GAMESCREEN)
 
     GAMESCREEN.blit(drawLetters(f'Winning Streak : {str(winStreak)}'), (SCREENWIDTH - 300, 100))
-
 
 def endGame():
     """Handles the end of a round"""
@@ -124,51 +132,41 @@ def endGame():
             if event.type == pygame.QUIT:
                 pygame.quit()
 
-
-
-#  Hangman Animation Functions
 def drawGallows(window):
     """Draw the Gallows"""
-    pygame.draw.line(window, WHITE, (100, 400), (275, 400), 3)
-    pygame.draw.line(window, WHITE, (125, 400), (125, 50), 3)
-    pygame.draw.line(window, WHITE, (125, 50), (275, 50), 3)
-    pygame.draw.line(window, WHITE, (125, 100), (175, 50), 3)
-    pygame.draw.line(window, WHITE, (275, 50), (275, 125), 3)
-
+    pygame.draw.line(window, (255, 255, 0), (100, 400), (275, 400), 3)
+    pygame.draw.line(window, (255, 255, 0), (125, 400), (125, 50), 3)
+    pygame.draw.line(window, (255, 255, 0), (125, 50), (275, 50), 3)
+    pygame.draw.line(window, (255, 255, 0), (125, 100), (175, 50), 3)
+    pygame.draw.line(window, (255, 255, 0), (275, 50), (275, 125), 3)
 
 def drawHead(window):
     """Draws the Hanged man's Head"""
-    pygame.draw.circle(window, WHITE, (275, 150), (25), 3)
-
+    pygame.draw.circle(window, (255, 255, 0), (275, 150), (25), 3)
 
 def drawBody(window):
     """Draws the Hanged Man's Body"""
-    pygame.draw.line(window, WHITE, (275, 175), (275, 225), 3)
-
+    pygame.draw.line(window, (255, 255, 0), (275, 175), (275, 225), 3)
 
 def drawLeftArm(window):
     """Draws the Hanged Man's Left Arm"""
-    pygame.draw.line(window, WHITE, (275, 185), (245, 215), 3)
-
+    pygame.draw.line(window, (255, 255, 0), (275, 185), (245, 215), 3)
 
 def drawRightArm(window):
     """Draws the Hanged Man's Right Arm"""
-    pygame.draw.line(window, WHITE, (275, 185), (305, 215), 3)
-
+    pygame.draw.line(window, (255, 255, 0), (275, 185), (305, 215), 3)
 
 def drawLeftLeg(window):
     """Draws the Hanged Man's Left Leg"""
-    pygame.draw.line(window, WHITE, (275, 225), (250, 250), 3)
-    pygame.draw.line(window, WHITE, (250, 250), (250, 275), 3)
-    pygame.draw.line(window, WHITE, (250, 275), (240, 275), 3)
-
+    pygame.draw.line(window, (255, 255, 0), (275, 225), (250, 250), 3)
+    pygame.draw.line(window, (255, 255, 0), (250, 250), (250, 275), 3)
+    pygame.draw.line(window, (255, 255, 0), (250, 275), (240, 275), 3)
 
 def drawRightLeg(window):
     """Draws the Hanged Man's Left Leg"""
-    pygame.draw.line(window, WHITE, (275, 225), (300, 250), 3)
-    pygame.draw.line(window, WHITE, (300, 250), (300, 275), 3)
-    pygame.draw.line(window, WHITE, (300, 275), (310, 275), 3)
-
+    pygame.draw.line(window, (255, 255, 0), (275, 225), (300, 250), 3)
+    pygame.draw.line(window, (255, 255, 0), (300, 250), (300, 275), 3)
+    pygame.draw.line(window, (255, 255, 0), (300, 275), (310, 275), 3)
 
 def drawHangman(window, numberGuesses):
     """Draws the various stages of the Hanged Man"""
@@ -187,27 +185,24 @@ def drawHangman(window, numberGuesses):
     if numberGuesses >= 6:
         drawRightLeg(window)
 
-
-#  Hangman Words list
-WORDLIST = []
-openFile()
-ALPHABETBUTTONS = []
-
-
-#  initialization of the pygame module
+# Hangman Words list
 pygame.init()
+pygame.font.init()
+difficulty = selectDifficulty()
+WORDLIST = []
+ALPHABETBUTTONS = []
+openFile(difficulty)  # Assuming 'difficulty' is already defined
 
-
-#  Game settings
+# Game settings
 SCREENWIDTH = 800
 SCREENHEIGHT = 640
 WHITE = (255, 255, 255)
 
-#  Display Initialization
+# Display Initialization
 GAMESCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 pygame.display.set_caption('Hang Man')
 
-#  Game Variables and load functions
+# Game Variables and load functions
 numberOfGuesses = 0
 chosenWord = selectRandomWord().upper()
 guessWord = [' ' for letter in chosenWord]
@@ -218,15 +213,11 @@ mouseClicked = False
 gameOver = False
 winStreak = 0
 
-
-#  Main game loop.
+# Main game loop.
 RUN = True
 while RUN:
-
-    #  Fill the screen with Black Color
     GAMESCREEN.fill((0, 0, 0))
 
-    #  Pygame event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             RUN = False
@@ -245,23 +236,20 @@ while RUN:
                     item.active = False
 
         elif event.type == pygame.MOUSEBUTTONUP:
-            mouseclicked = False
+            mouseClicked = False
 
     drawLetterLines(chosenWord)
     drawAlphabet(ALPHABETBUTTONS)
     drawHangman(GAMESCREEN, numberOfGuesses)
 
-    #  Detect Mouse Collision with buttons
     for ALPHABETBUTTON in ALPHABETBUTTONS:
         if ALPHABETBUTTON.imageRect.collidepoint(pygame.mouse.get_pos()):
             ALPHABETBUTTON.mouseHighlight(GAMESCREEN)
 
-    #  Update the display screen
     pygame.display.update()
 
     if ''.join(guessWord) == chosenWord or numberOfGuesses == 6:
         gameOver = True
         endGame()
-
 
 pygame.quit()
