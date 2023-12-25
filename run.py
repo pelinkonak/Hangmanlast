@@ -45,7 +45,7 @@ def selectDifficulty():
     while True:
         choice = input("Which level would you like to choose?: ")
         if choice in ['1', '2', '3']:
-            return {'1': 'easy', '2': 'medium', '3': 'hard2'}[choice]
+            return {'1': 'easy', '2': 'medium', '3': 'hard'}[choice]
         else:
             print("Invalid choice. Please enter 1, 2, or 3.")
 
